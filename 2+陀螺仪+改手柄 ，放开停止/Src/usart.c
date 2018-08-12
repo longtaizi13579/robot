@@ -50,7 +50,7 @@ char uart_buffer[100 + 1];
 char buffer_rx_temp;
 char buffer1_rx_temp;
 int pulse;
-int timecounter=100;
+int timecounter=100000;
 extern int32_t angle;
 UART_HandleTypeDef huart1;
 

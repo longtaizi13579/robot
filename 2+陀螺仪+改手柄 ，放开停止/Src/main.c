@@ -259,14 +259,7 @@ void SystemClock_Config(void)
   timecounter--;
   if(timecounter<150)
   {
-     if(pulseleft>=0)
-     {
-       pwm_control(1000,1000);
-     }
-     else
-     {
-      pwm_control(-1000,-1000);
-     }
+       pwm_control(0,0);
   }
   if(timecounter==0)
   {

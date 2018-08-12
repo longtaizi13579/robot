@@ -25,7 +25,7 @@ if not "%~1" == "" goto debugFile
 
 @echo on 
 
-"D:\robot\IAR 8.22.1\common\bin\cspybat" -f "C:\Users\bread\Desktop\change\2+陀螺仪+改手柄 ，放开停止\EWARM\settings\encoder.encoder.general.xcl" --backend -f "C:\Users\bread\Desktop\change\2+陀螺仪+改手柄 ，放开停止\EWARM\settings\encoder.encoder.driver.xcl" 
+"D:\robot\IAR 8.22.1\common\bin\cspybat" -f "C:\Users\bread\Desktop\robot\2+陀螺仪+改手柄 ，放开停止\EWARM\settings\encoder.encoder.general.xcl" --backend -f "C:\Users\bread\Desktop\robot\2+陀螺仪+改手柄 ，放开停止\EWARM\settings\encoder.encoder.driver.xcl" 
 
 @echo off 
 goto end 
@@ -34,7 +34,7 @@ goto end
 
 @echo on 
 
-"D:\robot\IAR 8.22.1\common\bin\cspybat" -f "C:\Users\bread\Desktop\change\2+陀螺仪+改手柄 ，放开停止\EWARM\settings\encoder.encoder.general.xcl" "--debug_file=%~1" --backend -f "C:\Users\bread\Desktop\change\2+陀螺仪+改手柄 ，放开停止\EWARM\settings\encoder.encoder.driver.xcl" 
+"D:\robot\IAR 8.22.1\common\bin\cspybat" -f "C:\Users\bread\Desktop\robot\2+陀螺仪+改手柄 ，放开停止\EWARM\settings\encoder.encoder.general.xcl" "--debug_file=%~1" --backend -f "C:\Users\bread\Desktop\robot\2+陀螺仪+改手柄 ，放开停止\EWARM\settings\encoder.encoder.driver.xcl" 
 
 @echo off 
 :end
