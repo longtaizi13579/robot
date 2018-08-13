@@ -260,8 +260,25 @@ void HAL_SYSTICK_Callback(){
   if(time_1ms_cnt==5){
     time_1ms_cnt=0;
     //speed_control();
-    megnet();
-    direction_control();
+    //megnet();
+    //direction_control();
+    if(timecounter<150)
+    {
+      if(leftspeedset+rightspeedset>0)
+      {
+      if(leftspeedset>rightspeedset)
+        rightspeedset=leftspeedset;
+      else
+        leftspeedset=rightspeedset;
+      }
+      else
+      {
+      if(leftspeedset<rightspeedset)
+        rightspeedset=leftspeedset;
+      else
+        leftspeedset=rightspeedset;
+      }
+    }
     speed_control();
   }
   if(time_50ms_cnt==50)
