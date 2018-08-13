@@ -42,6 +42,7 @@ float rightspeedkd=-15;//右轮速度d值
 float rightspeederroracc=0;//右轮速度累计误差
 float rightspeederrorlast=0;//右轮上次误差
 int speedenable=1;//速度环使能
+int angleset=0;
 
 void megnet()//磁力计获取角度
 {
@@ -57,7 +58,9 @@ void megnet()//磁力计获取角度
     
       mag[0] -= mid_x;
       mag[1] -= mid_y;
-      angle = (int32_t)(atan2((double)mag[0], (double)mag[1]) * 180 / 3.1415926 - target);
+      angle = (int32_t)(atan2((double)mag[0], (double)mag[1]) * 180 / 3.1415926 - target)+angleset;
+      angle = angle > 180 ? angle - 360 : angle;
+      angle = angle <= -180 ? angle + 360 : angle;
 }
 }
 void direction_control()//方向环PID

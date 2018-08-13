@@ -339,12 +339,12 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart){
       timecounter=300;
     }
     else if(buffer1_rx_temp=='A'){
-      initrightspeedset=11;
-      initleftspeedset=11;
+      initrightspeedset=initrightspeedset+1;
+      initleftspeedset=initrightspeedset+1;
     }
     else if(buffer1_rx_temp=='B'){
-      initrightspeedset=-11;
-      initleftspeedset=-11;
+      initrightspeedset=initrightspeedset-1;
+      initleftspeedset=initrightspeedset-1;
     }
     else if(buffer1_rx_temp=='C'){
       if(initrightspeedset>0)
@@ -357,7 +357,8 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart){
         initrightspeedset=-2;
         initleftspeedset=-2;
       }
-      angle=angle+5;
+      angleset=angleset-5;
+      angleset = angleset <= -180 ? angleset + 360 : angleset;
     }
     else if(buffer1_rx_temp=='D'){
        if(initrightspeedset>0)
@@ -370,7 +371,8 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart){
         initrightspeedset=-2;
         initleftspeedset=-2;
       }
-      angle=angle-5;
+     angleset=angleset+5;
+     angleset = angleset > 180 ? angleset - 360 : angleset;
     }
     else if(buffer1_rx_temp=='I'){
       num=23;
@@ -385,9 +387,8 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart){
       uprintf("hello world\r\n");
     }
     else if(buffer1_rx_temp=='K'){//右占空比增加
-       pulseleft=pulseleft-50;
-      pulseright=pulseright+50;
-      pwm_control(pulseleft,pulseright);
+      initrightspeedset=0;
+      initleftspeedset=0;
     }
     else if(buffer1_rx_temp=='L'){//左占空比增加
       pulseleft=pulseleft+50;
@@ -404,9 +405,8 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart){
       pwm_control(pulseleft,pulseright);
     }
     else if(buffer1_rx_temp=='F'){//停止
-      pulseleft=0;
-      pulseright=0;
-      pwm_control(pulseleft,pulseright);
+     initrightspeedset=0;
+      initleftspeedset=0;
     }
     else if(buffer1_rx_temp=='G'){//调整目标角度
       target = angle;
