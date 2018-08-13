@@ -71,24 +71,6 @@ void pwm_init(void);//电机测试代码（初始化）
 
 /* USER CODE END 0 */
 
-int leftspeed=0;//左轮速度
-int rightspeed=0;//右轮速度
-int leftspeedset=0;//左轮速度预值
-int rightspeedset=0;//右轮速度预值
-float leftspeedkp=100;//左轮速度p值
-float leftspeedki=0;//左轮速度i值
-float leftspeedkd=0;//左轮速度d值
-int leftspeederroracc=0;//左轮速度累计误差
-int leftspeederrorlast=0;//左轮上次误差
-
-float rightspeedkp=0;//右轮速度p值
-float rightspeedki=0;//右轮速度i值
-float rightspeedkd=0;//右轮速度d值
-int rightspeederroracc=0;//右轮速度累计误差
-int rightspeederrorlast=0;//右轮上次误差
-int speedenable=1;//速度环使能
-
-
 int main(void)
 {
 
@@ -278,39 +260,8 @@ void HAL_SYSTICK_Callback(){
   time_50ms_cnt++;
   if(time_1ms_cnt==5){
     time_1ms_cnt=0;
-    //uprintf("\n\nleftspeedkd=%f",leftspeedkd);
-    //uprintf("\n\nleftspeedkp=%f",leftspeedkp);
     //速度环
-    leftspeed=TIM2->CNT;
-    rightspeed=TIM4->CNT;
-    if(rightspeed>30000)
-    {
-      rightspeed=rightspeed-65536;
-    }
-    if(leftspeed>30000)
-    {
-      leftspeed=leftspeed-65536;
-    }
-    rightspeed=rightspeed*(-1);
-    //左轮pid
-    int lefterror=leftspeedset-leftspeed;
-    leftspeederroracc+=lefterror;
-    
-    int leftPIDcontrol=(int)(leftspeedkp*lefterror+leftspeedki*leftspeederroracc+leftspeedkd*(lefterror-leftspeederrorlast));
-    leftspeederrorlast=lefterror;
-    //右轮pid
-    int righterror=rightspeedset-rightspeed;
-    rightspeederroracc+=righterror;
-    //uprintf("rightspeederroracc=%d",rightspeederroracc);
-    int rightPIDcontrol=(int)(rightspeedkp*righterror+rightspeedki*rightspeederroracc+rightspeedkd*(righterror-rightspeederrorlast));
-    rightspeederrorlast=righterror;
-    //if(speedenable)
-    //{
-      pwm_control(leftPIDcontrol,rightPIDcontrol);
-      //uprintf("leftPIDcontrol=%d,rightPIDcontrol=%d",leftPIDcontrol,rightPIDcontrol);
-    //}
-    TIM2->CNT=0;
-    TIM4->CNT=0;
+    speed_control();
     megnet();
     direction_control();
   }
