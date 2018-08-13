@@ -260,7 +260,6 @@ void HAL_SYSTICK_Callback(){
   time_50ms_cnt++;
   if(time_1ms_cnt==5){
     time_1ms_cnt=0;
-    //ËÙ¶È»·
     speed_control();
     megnet();
     direction_control();

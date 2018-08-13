@@ -62,9 +62,6 @@ void megnet()//磁力计获取角度
 }
 void direction_control()//方向环PID
 {
-    
-   if(PID_ENABLE == 0 || timecounter >= 0)
-    return;
     accu_angle += angle;
     uprintf("angle=%d",angle);
     if(accu_angle > 7500)

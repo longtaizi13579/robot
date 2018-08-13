@@ -54,7 +54,6 @@
 extern UART_HandleTypeDef huart1;
 extern UART_HandleTypeDef huart2;
 /* USER CODE BEGIN Private defines */
-
 extern int timecounter;
 /* USER CODE END Private defines */
 extern void _Error_Handler(char *, int);

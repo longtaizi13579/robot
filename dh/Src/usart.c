@@ -44,7 +44,7 @@
 #include "main.h"
 /* USER CODE BEGIN 0 */
 #include <stdarg.h>
-
+#include "tim.h"
 /* USER CODE END 0 */
 char uart_buffer[100 + 1];
 char buffer_rx_temp;
@@ -241,6 +241,7 @@ void uprintf2(char *fmt, ...)
 	va_end(arg_ptr);
     HAL_UART_Transmit(&huart2,(uint8_t *)uart_buffer,size,1000);
 }
+int num=0 ;
 /* USER CODE END 1 */
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart){
   static uint16_t stick_1 = 0;
@@ -375,14 +376,16 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart){
       timecounter=300;
     }
     else if(buffer1_rx_temp=='I'){
-      pulseleft=pulseleft+50;
-      pulseright=pulseright+50;
-      pwm_control(pulseleft,pulseright);
+      num=23;
+      changestate(num);
+      uprintf("%d\r\n",TIM4->CCR3);
+      uprintf("hello world\r\n");
     }
     else if(buffer1_rx_temp=='J'){
-      pulseleft=pulseleft-50;
-      pulseright=pulseright-50;
-      pwm_control(pulseleft,pulseright);
+      num=43;
+      changestate(num);
+      uprintf("%d\r\n",TIM4->CCR3);
+      uprintf("hello world\r\n");
     }
     else if(buffer1_rx_temp=='K'){//右占空比增加
        pulseleft=pulseleft-50;
@@ -414,8 +417,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart){
     else if(buffer1_rx_temp=='H'){//启动、关闭PID
       PID_ENABLE = PID_ENABLE > 0 ? 0 : 1;
     }
-    //uprintf("TIM3->CCR1=%d,TIM3->CCR2=%d,TIM3->CCR3=%d,TIM3->CCR4=%d\n",TIM3->CCR1,TIM3->CCR2,TIM3->CCR3,TIM3->CCR4);
-    //uprintf("pulseleft=%d,pulseright=%d\n ",pulseleft,pulseright);
+    
   }
 }
 char s[22]={'b','y',16,6};
@@ -432,6 +434,7 @@ void send_wave(float arg1,float arg2,float arg3,float arg4){
   HAL_UART_Transmit(&huart1,(uint8_t *)s, 22,1000);
 
 }
+
 /**
   * @}
   */
