@@ -31,13 +31,14 @@ int rightspeed=0;//右轮速度
 float leftspeedset=0;//左轮速度预值
 float rightspeedset=0;//右轮速度预值
 float leftspeedkp=128;//左轮速度p值
-float leftspeedki=0.35;//左轮速度i值
+float leftspeedki=0;//左轮速度i值
 float leftspeedkd=-15;//左轮速度d值
 float leftspeederroracc=0;//左轮速度累计误差
 float leftspeederrorlast=0;//左轮上次误差
-
+int leftmaichong=0;//脉冲数
+int rightmaichong=0;//脉冲数
 float rightspeedkp=135;//右轮速度p值
-float rightspeedki=0.42;//右轮速度i值
+float rightspeedki=0;//右轮速度i值
 float rightspeedkd=-15;//右轮速度d值
 float rightspeederroracc=0;//右轮速度累计误差
 float rightspeederrorlast=0;//右轮上次误差
@@ -76,7 +77,7 @@ void direction_control()//方向环PID
     rightspeedset=(float)initrightspeedset+PID;
     //pwm_control(pwm1,pwm2);
     last_angle=angle;
-    send_wave((float)angle,(float)leftspeedset,(float)rightspeedset,(float)0);
+    //send_wave((float)angle,(float)leftspeedset,(float)rightspeedset,(float)0);
 
 }
 
@@ -93,6 +94,8 @@ void speed_control()//速度环
       leftspeed=leftspeed-65536;
     }
     rightspeed=rightspeed*(-1);
+    leftmaichong+=leftspeed;//脉冲数
+    rightmaichong+=rightspeed;//脉冲数
     //左轮pid
     float lefterror=leftspeedset-(float)leftspeed;
     leftspeederroracc+=lefterror;
@@ -111,4 +114,5 @@ void speed_control()//速度环
     //}
     TIM2->CNT=0;
     TIM4->CNT=0;
+    uprintf("left=%d,right=%d",leftmaichong,rightmaichong);
 }

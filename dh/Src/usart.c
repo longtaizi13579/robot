@@ -352,12 +352,12 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart){
       if(rightspeedset>0)
       {
         leftspeedset=leftspeedset-1;
-        rightspeedset=rightspeedset+1;
+        rightspeedset=rightspeedset;
       }
       else
       {
         leftspeedset=leftspeedset+1;
-        rightspeedset=rightspeedset-1;
+        rightspeedset=rightspeedset;
       }
       timecounter=350;
       //angleset=angleset-5;
@@ -366,12 +366,12 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart){
     else if(buffer1_rx_temp=='D'){
        if(leftspeedset>0)
       {
-        leftspeedset=leftspeedset+1;
+        leftspeedset=leftspeedset;
         rightspeedset=rightspeedset-1;
       }
       else
       {
-       leftspeedset=leftspeedset-1;
+       leftspeedset=leftspeedset;
         rightspeedset=rightspeedset+1;
       }
       timecounter=350;
@@ -383,8 +383,8 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart){
       changestate(num);
       uprintf("%d\r\n",TIM4->CCR3);
       uprintf("hello world\r\n");
-    */leftspeedset=11;
-      rightspeedset=11;
+    */leftspeedset=4;
+      rightspeedset=4;
       timecounter=200000;
     }
     else if(buffer1_rx_temp=='J'){
@@ -392,23 +392,35 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart){
       changestate(num);
       uprintf("%d\r\n",TIM4->CCR3);
       uprintf("hello world\r\n");
-    */leftspeedset=-11;
-      rightspeedset=-11;
+    */leftspeedset=-4;
+      rightspeedset=-4;
       timecounter=200000;
     }
     else if(buffer1_rx_temp=='K'){//右占空比增加
       if(rightspeedset>0)
-      leftspeedset=leftspeedset-6;
+      {
+        leftspeedset=1;
+        rightspeedset=6;
+      }
       else
-      leftspeedset=leftspeedset+6;  
-      timecounter=350;
+      {
+        leftspeedset=-1;
+        rightspeedset=-6;  
+      }
+      timecounter=20000;
     }
     else if(buffer1_rx_temp=='L'){//左占空比增加
       if(leftspeedset>0)
-     rightspeedset= rightspeedset-6;
+     {
+        leftspeedset=6;
+        rightspeedset=1;
+      }
      else
-       rightspeedset= rightspeedset+6;
-     timecounter=350;
+      {
+        leftspeedset=-6;
+        rightspeedset=-1;
+      }
+     timecounter=20000;
     }
     else if(buffer1_rx_temp=='E'){//两轮等速
       pulseleft=(pulseleft+pulseright)/2;
