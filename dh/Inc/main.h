@@ -55,8 +55,6 @@ void pwm_init();
 void pwm_control(int,int);//电机占空比变化代码
 extern int pulseleft;
 extern int pulseright;
-extern int leftspeedset;
-extern int rightspeedset;//右轮速度
 extern float leftspeedkp;//左轮速度p值
 extern float leftspeedki;//左轮速度i值
 extern float leftspeedkd;//左轮速度d值

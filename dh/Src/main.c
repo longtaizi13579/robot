@@ -104,7 +104,7 @@ int main(void)
   MX_I2C2_Init();
 
   /* USER CODE BEGIN 2 */
-  //MPU9250_Init(&MPU9250);
+  MPU9250_Init(&MPU9250);
   /* USER CODE BEGIN 2 */
 
   /* USER CODE END 2 */
@@ -260,13 +260,14 @@ void HAL_SYSTICK_Callback(){
   time_50ms_cnt++;
   if(time_1ms_cnt==5){
     time_1ms_cnt=0;
-    speed_control();
+    //speed_control();
     megnet();
     direction_control();
+    speed_control();
   }
   if(time_50ms_cnt==50)
   {
-    send_wave((float)rightspeed,(float)rightspeedset,(float)leftspeed,(float)leftspeedset);
+    //send_wave((float)rightspeed,(float)rightspeedset,(float)leftspeed,(float)leftspeedset);
     time_50ms_cnt=0;
   }
 }

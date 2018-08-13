@@ -28,19 +28,19 @@ uint8_t PID_ENABLE = 0;
 
 int leftspeed=0;//左轮速度
 int rightspeed=0;//右轮速度
-int leftspeedset=0;//左轮速度预值
-int rightspeedset=0;//右轮速度预值
-float leftspeedkp=100;//左轮速度p值
-float leftspeedki=0;//左轮速度i值
-float leftspeedkd=0;//左轮速度d值
-int leftspeederroracc=0;//左轮速度累计误差
-int leftspeederrorlast=0;//左轮上次误差
+float leftspeedset=0;//左轮速度预值
+float rightspeedset=0;//右轮速度预值
+float leftspeedkp=128;//左轮速度p值
+float leftspeedki=0.35;//左轮速度i值
+float leftspeedkd=-15;//左轮速度d值
+float leftspeederroracc=0;//左轮速度累计误差
+float leftspeederrorlast=0;//左轮上次误差
 
-float rightspeedkp=0;//右轮速度p值
-float rightspeedki=0;//右轮速度i值
-float rightspeedkd=0;//右轮速度d值
-int rightspeederroracc=0;//右轮速度累计误差
-int rightspeederrorlast=0;//右轮上次误差
+float rightspeedkp=135;//右轮速度p值
+float rightspeedki=0.42;//右轮速度i值
+float rightspeedkd=-15;//右轮速度d值
+float rightspeederroracc=0;//右轮速度累计误差
+float rightspeederrorlast=0;//右轮上次误差
 int speedenable=1;//速度环使能
 
 void megnet()//磁力计获取角度
@@ -69,10 +69,11 @@ void direction_control()//方向环PID
     if(accu_angle < -7500)
       accu_angle = -7500;
     PID = accu_angle * KI + angle * KP + (angle-last_angle) * KD;
-    int pwm1=pulseright-(int)PID/4;
-    int pwm2=pulseleft+(int)PID/4;
-    pwm_control(pwm1,pwm2);
+    leftspeedset=(float)pulseright-PID/400.0;
+    rightspeedset=(float)pulseleft+PID/400.0;
+    //pwm_control(pwm1,pwm2);
     last_angle=angle;
+    //send_wave((float)angle,(float)accu_angle,(float)pwm1,(float)pwm2);
 
 }
 
@@ -90,13 +91,13 @@ void speed_control()//速度环
     }
     rightspeed=rightspeed*(-1);
     //左轮pid
-    int lefterror=leftspeedset-leftspeed;
+    float lefterror=leftspeedset-(float)leftspeed;
     leftspeederroracc+=lefterror;
     
     int leftPIDcontrol=(int)(leftspeedkp*lefterror+leftspeedki*leftspeederroracc+leftspeedkd*(lefterror-leftspeederrorlast));
     leftspeederrorlast=lefterror;
     //右轮pid
-    int righterror=rightspeedset-rightspeed;
+    float righterror=rightspeedset-(float)rightspeed;
     rightspeederroracc+=righterror;
     int rightPIDcontrol=(int)(rightspeedkp*righterror+rightspeedki*rightspeederroracc+rightspeedkd*(righterror-rightspeederrorlast));
     rightspeederrorlast=righterror;

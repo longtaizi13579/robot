@@ -41,6 +41,7 @@
 #include "usart.h"
 #include "string.h"
 #include "gpio.h"
+#include "control.h"
 #include "main.h"
 /* USER CODE BEGIN 0 */
 #include <stdarg.h>
@@ -281,7 +282,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart){
     }
    else if(buffer_rx_temp=='g')
     {
-      rightspeedset=0;
+      rightspeedset=7;
       leftspeedset=7;
     }
     else if(buffer_rx_temp=='h')
