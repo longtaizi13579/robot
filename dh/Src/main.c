@@ -135,29 +135,28 @@ void pwm_init(void)//电机测试代码（初始化）
   TIM3->CCR4=1000;
   pulseleft=0;
   pulseright=0;
-
 }
 void pwm_control(int pulse1,int pulse2)//电机占空比变化代码
 {
   if(pulse1>1000)
   {
     pulse1=1000;
-    pulseleft=1000;
+    //pulseleft=1000;
   }
   if(pulse2>1000)
   {
     pulse2=1000;
-    pulseright=1000;
+    //pulseright=1000;
   }
    if(pulse1<-1000)
    {
      pulse1=-1000;
-     pulseleft=-1000;
+     //pulseleft=-1000;
    }
   if(pulse2<-1000)
   {
     pulse2=-1000;
-    pulseright=-1000;  
+    //pulseright=-1000;  
   }
   if(pulse1>=0&&pulse2>=0)
   {

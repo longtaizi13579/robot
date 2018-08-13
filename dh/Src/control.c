@@ -14,9 +14,9 @@ int16_t gy[3];   //三轴陀螺仪的值，分别为 X　Y　Z的角速度
 int16_t ac[3];  //XYZ三轴的加速度
 int16_t mag[3]; //三轴磁场
 
-double KP = 7;
-double KI = 0.01;//0.02;
-double KD = 5;//10;
+double KP = -0.21;
+double KI = 0;//0.02;
+double KD = 0.05;//10;
 
 double PID = 0;
 
@@ -63,17 +63,17 @@ void megnet()//磁力计获取角度
 void direction_control()//方向环PID
 {
     accu_angle += angle;
-    uprintf("angle=%d",angle);
-    if(accu_angle > 7500)
-      accu_angle = 7500;
-    if(accu_angle < -7500)
-      accu_angle = -7500;
+    //uprintf("angle=%d",angle);
+    if(accu_angle > 10000)
+      accu_angle = 10000;
+    if(accu_angle < -10000)
+      accu_angle = -10000;
     PID = accu_angle * KI + angle * KP + (angle-last_angle) * KD;
-    leftspeedset=(float)pulseright-PID/400.0;
-    rightspeedset=(float)pulseleft+PID/400.0;
+    leftspeedset=(float)initrightspeedset-PID;
+    rightspeedset=(float)initrightspeedset+PID;
     //pwm_control(pwm1,pwm2);
     last_angle=angle;
-    //send_wave((float)angle,(float)accu_angle,(float)pwm1,(float)pwm2);
+    send_wave((float)angle,(float)leftspeedset,(float)rightspeedset,(float)0);
 
 }
 

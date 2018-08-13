@@ -57,6 +57,8 @@ extern UART_HandleTypeDef huart2;
 extern int timecounter;
 /* USER CODE END Private defines */
 extern void _Error_Handler(char *, int);
+extern float initrightspeedset;
+extern float initleftspeedset;
 /* USER CODE BEGIN Prototypes */
 void send_wave(float arg1,float arg2,float arg3,float arg4);
 void MX_USART1_UART_Init(void);

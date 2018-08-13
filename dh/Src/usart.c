@@ -243,6 +243,8 @@ void uprintf2(char *fmt, ...)
     HAL_UART_Transmit(&huart2,(uint8_t *)uart_buffer,size,1000);
 }
 int num=0 ;
+  float initrightspeedset=0;
+  float initleftspeedset=0;
 /* USER CODE END 1 */
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart){
   static uint16_t stick_1 = 0;
@@ -282,13 +284,13 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart){
     }
    else if(buffer_rx_temp=='g')
     {
-      rightspeedset=7;
-      leftspeedset=7;
+      initrightspeedset=7;
+      initleftspeedset=7;
     }
     else if(buffer_rx_temp=='h')
     {
-      rightspeedset=0;
-      leftspeedset=0;
+      initrightspeedset=0;
+      initleftspeedset=0;
     }
     else if(buffer_rx_temp=='i')
     {
@@ -337,44 +339,38 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart){
       timecounter=300;
     }
     else if(buffer1_rx_temp=='A'){
-      pulseleft=1000;
-      pulseright=1000;
-      pwm_control(pulseleft,pulseright);
-      timecounter=300;
+      initrightspeedset=11;
+      initleftspeedset=11;
     }
     else if(buffer1_rx_temp=='B'){
-      pulseleft=-1000;
-      pulseright=-1000;
-       pwm_control(pulseleft,pulseright);
-       timecounter=300;
+      initrightspeedset=-11;
+      initleftspeedset=-11;
     }
     else if(buffer1_rx_temp=='C'){
-      if(pulseleft>=0)
+      if(initrightspeedset>0)
       {
-      pulseleft=500;
-      pulseright=1000;
+        initrightspeedset=2;
+        initleftspeedset=2;
       }
       else
       {
-      pulseleft=-500;
-      pulseright=-1000;
+        initrightspeedset=-2;
+        initleftspeedset=-2;
       }
-      pwm_control(pulseleft,pulseright);
-      timecounter=300;
+      angle=angle+5;
     }
     else if(buffer1_rx_temp=='D'){
-      if(pulseleft>=0)
+       if(initrightspeedset>0)
       {
-      pulseleft=1000;
-      pulseright=500;
+        initrightspeedset=2;
+        initleftspeedset=2;
       }
       else
       {
-      pulseleft=-1000;
-      pulseright=-500;
+        initrightspeedset=-2;
+        initleftspeedset=-2;
       }
-      pwm_control(pulseleft,pulseright);
-      timecounter=300;
+      angle=angle-5;
     }
     else if(buffer1_rx_temp=='I'){
       num=23;
