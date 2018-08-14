@@ -133,77 +133,64 @@ void auto_control1()
   //state1=610;
   //state3=1110;
 
-  if((leftmaichong+rightmaichong>1300)&&autostate==1)
+  if(rightmaichong>250&&autostate==1)
   {
     leftmaichong=0;
     rightmaichong=0;
     autostate=2;
   }
-  else if(autostate==2 && leftmaichong>780)
+  else if(autostate==2 && leftmaichong>892)
   {
     leftmaichong=0;
     rightmaichong=0;
     autostate=3;
   
   }
-  else if(autostate==3 && rightmaichong>2150)
+  else if(autostate==3 && leftmaichong>860)
   {
     leftmaichong=0;
     rightmaichong=0;
     autostate=4; 
   }
-  else if(autostate==4 && leftmaichong>825)
+  else if(autostate==4 && rightmaichong>192)
   {
     leftmaichong=0;
     rightmaichong=0;
     autostate=5; 
   }
-  
-  else if(autostate==5 && leftmaichong>1160)
-  {
-    leftmaichong=0;
-    rightmaichong=0;
-    autostate=6; 
-  }
+ 
   
   if(laststate!=autostate)
   {
     if(autostate==1)
     {
       direction_enable=0;
-      rightspeedset=11;//左轮速度预值
-      leftspeedset=11;//右轮速度预值
+      rightspeedset=4.5;
+      leftspeedset=12.285;
     }
     else if(autostate==2)
     {
       direction_enable=0;
-      leftspeedset=8.7;
-      rightspeedset=2;
+      leftspeedset=8;
+      rightspeedset=12.4;
     }
     else if(autostate==3)
     {
-      leftspeedset=2;
-      rightspeedset=9;
+      leftspeedset=8;
+      rightspeedset=12.292;
       direction_enable=0;
     }
     else if(autostate==4)
     {
-      leftspeedset=9;
-      rightspeedset=2;
+      leftspeedset=12.9;
+      rightspeedset=4;
       direction_enable=0;
     }
     else if(autostate==5)
     {
       direction_enable=0;
-      leftspeedset=11;
-      rightspeedset=11;
-    
-    }
-    else if(autostate==6)
-    {
-      direction_enable=0;
-      leftspeedset=11;
-      rightspeedset=11;
+      leftspeedset=0;
+      rightspeedset=0;
     
     }
   }
