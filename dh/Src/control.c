@@ -30,16 +30,16 @@ int leftspeed=0;//左轮速度
 int rightspeed=0;//右轮速度
 float leftspeedset=0;//左轮速度预值
 float rightspeedset=0;//右轮速度预值
-float leftspeedkp=130;//左轮速度p值
-float leftspeedki=1;//左轮速度i值
-float leftspeedkd=-15;//左轮速度d值
+float leftspeedkp=100;//左轮速度p值
+float leftspeedki=0.5;//左轮速度i值
+float leftspeedkd=-10;//左轮速度d值
 float leftspeederroracc=0;//左轮速度累计误差
 float leftspeederrorlast=0;//左轮上次误差
 int leftmaichong=0;//脉冲数
 int rightmaichong=0;//脉冲数
-float rightspeedkp=135;//右轮速度p值
-float rightspeedki=1.05;//右轮速度i值
-float rightspeedkd=-15;//右轮速度d值
+float rightspeedkp=105;//右轮速度p值
+float rightspeedki=0.05;//右轮速度i值
+float rightspeedkd=-10;//右轮速度d值
 float rightspeederroracc=0;//右轮速度累计误差
 float rightspeederrorlast=0;//右轮上次误差
 int speedenable=1;//速度环使能
@@ -146,13 +146,13 @@ void auto_control1()
     autostate=3;
   
   }
-  else if(autostate==3 && rightmaichong>1705)
+  else if(autostate==3 && rightmaichong>2150)
   {
     leftmaichong=0;
     rightmaichong=0;
     autostate=4; 
   }
-  else if(autostate==4 && leftmaichong>810)
+  else if(autostate==4 && leftmaichong>825)
   {
     leftmaichong=0;
     rightmaichong=0;
@@ -171,39 +171,39 @@ void auto_control1()
     if(autostate==1)
     {
       direction_enable=0;
-      rightspeedset=7;//左轮速度预值
-      leftspeedset=7;//右轮速度预值
+      rightspeedset=11;//左轮速度预值
+      leftspeedset=11;//右轮速度预值
     }
     else if(autostate==2)
     {
       direction_enable=0;
-      leftspeedset=4.35;
-      rightspeedset=1;
+      leftspeedset=8.7;
+      rightspeedset=2;
     }
     else if(autostate==3)
     {
-      leftspeedset=1;
-      rightspeedset=4.5;
+      leftspeedset=2;
+      rightspeedset=9;
       direction_enable=0;
     }
     else if(autostate==4)
     {
-      leftspeedset=4.5;
-      rightspeedset=1;
+      leftspeedset=9;
+      rightspeedset=2;
       direction_enable=0;
     }
     else if(autostate==5)
     {
       direction_enable=0;
-      leftspeedset=7;
-      rightspeedset=7;
+      leftspeedset=11;
+      rightspeedset=11;
     
     }
     else if(autostate==6)
     {
       direction_enable=0;
-      leftspeedset=0;
-      rightspeedset=0;
+      leftspeedset=11;
+      rightspeedset=11;
     
     }
   }
