@@ -21,30 +21,31 @@ double KD = 0.05;//10;
 double PID = 0;
 
 int32_t accu_angle = 0;
-int32_t angle = 0;
+int angle = 0;
 int32_t last_angle = 0;
-int32_t target = 0;
+int target = 0;
 uint8_t PID_ENABLE = 0;
 
 int leftspeed=0;//左轮速度
 int rightspeed=0;//右轮速度
 float leftspeedset=0;//左轮速度预值
 float rightspeedset=0;//右轮速度预值
-float leftspeedkp=128;//左轮速度p值
-float leftspeedki=0;//左轮速度i值
+float leftspeedkp=130;//左轮速度p值
+float leftspeedki=1;//左轮速度i值
 float leftspeedkd=-15;//左轮速度d值
 float leftspeederroracc=0;//左轮速度累计误差
 float leftspeederrorlast=0;//左轮上次误差
 int leftmaichong=0;//脉冲数
 int rightmaichong=0;//脉冲数
 float rightspeedkp=135;//右轮速度p值
-float rightspeedki=0;//右轮速度i值
+float rightspeedki=1.05;//右轮速度i值
 float rightspeedkd=-15;//右轮速度d值
 float rightspeederroracc=0;//右轮速度累计误差
 float rightspeederrorlast=0;//右轮上次误差
 int speedenable=1;//速度环使能
-int angleset=0;
+int angleset=0;//速度环预设值
 
+int direction_enable=0;//方向环使能
 void megnet()//磁力计获取角度
 {
   MPU_Read6500(&MPU9250,ac,gy);
@@ -66,6 +67,8 @@ void megnet()//磁力计获取角度
 }
 void direction_control()//方向环PID
 {
+    if(!direction_enable)//关闭使能后，控制速度可以直接调节leftspeedset,rightspeedset
+      return ;
     accu_angle += angle;
     //uprintf("angle=%d",angle);
     if(accu_angle > 10000)
@@ -83,19 +86,6 @@ void direction_control()//方向环PID
 
 void speed_control()//速度环
 {
-    leftspeed=TIM2->CNT;
-    rightspeed=TIM4->CNT;
-    if(rightspeed>30000)
-    {
-      rightspeed=rightspeed-65536;
-    }
-    if(leftspeed>30000)
-    {
-      leftspeed=leftspeed-65536;
-    }
-    rightspeed=rightspeed*(-1);
-    leftmaichong+=leftspeed;//脉冲数
-    rightmaichong+=rightspeed;//脉冲数
     //左轮pid
     float lefterror=leftspeedset-(float)leftspeed;
     leftspeederroracc+=lefterror;
@@ -112,7 +102,110 @@ void speed_control()//速度环
       pwm_control(leftPIDcontrol,rightPIDcontrol);
       //uprintf("leftPIDcontrol=%d,rightPIDcontrol=%d",leftPIDcontrol,rightPIDcontrol);
     //}
-    TIM2->CNT=0;
-    TIM4->CNT=0;
+    leftspeed=0;
+    rightspeed=0;
     uprintf("left=%d,right=%d",leftmaichong,rightmaichong);
+}
+int autostate=0;//自动控制状态
+int laststate=0;//上一次状态
+void maichongnew()//更新脉冲（1ms一次）
+{
+      int getleft=TIM2->CNT;
+      int getright=TIM4->CNT;
+     if(getright>30000)
+     {
+        getright=getright-65536;
+      }
+      if(getleft>30000)
+      {
+        getleft=getleft-65536;
+      }
+      getright=getright*(-1);
+      leftspeed+=getleft;
+      rightspeed+=getright;
+      leftmaichong+=getleft;
+      rightmaichong+=getright;
+      TIM2->CNT=0;
+      TIM4->CNT=0;
+}
+void auto_control1()
+{
+  //state1=610;
+  //state3=1110;
+
+  if((leftmaichong+rightmaichong>1300)&&autostate==1)
+  {
+    leftmaichong=0;
+    rightmaichong=0;
+    autostate=2;
+  }
+  else if(autostate==2 && leftmaichong>780)
+  {
+    leftmaichong=0;
+    rightmaichong=0;
+    autostate=3;
+  
+  }
+  else if(autostate==3 && rightmaichong>1705)
+  {
+    leftmaichong=0;
+    rightmaichong=0;
+    autostate=4; 
+  }
+  else if(autostate==4 && leftmaichong>810)
+  {
+    leftmaichong=0;
+    rightmaichong=0;
+    autostate=5; 
+  }
+  
+  else if(autostate==5 && leftmaichong>1160)
+  {
+    leftmaichong=0;
+    rightmaichong=0;
+    autostate=6; 
+  }
+  
+  if(laststate!=autostate)
+  {
+    if(autostate==1)
+    {
+      direction_enable=0;
+      rightspeedset=7;//左轮速度预值
+      leftspeedset=7;//右轮速度预值
+    }
+    else if(autostate==2)
+    {
+      direction_enable=0;
+      leftspeedset=4.35;
+      rightspeedset=1;
+    }
+    else if(autostate==3)
+    {
+      leftspeedset=1;
+      rightspeedset=4.5;
+      direction_enable=0;
+    }
+    else if(autostate==4)
+    {
+      leftspeedset=4.5;
+      rightspeedset=1;
+      direction_enable=0;
+    }
+    else if(autostate==5)
+    {
+      direction_enable=0;
+      leftspeedset=7;
+      rightspeedset=7;
+    
+    }
+    else if(autostate==6)
+    {
+      direction_enable=0;
+      leftspeedset=0;
+      rightspeedset=0;
+    
+    }
+  }
+  laststate=autostate;
 }

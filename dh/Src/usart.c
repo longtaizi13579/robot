@@ -55,7 +55,7 @@ extern int32_t angle;
 extern int32_t target;
 extern uint8_t PID_ENABLE;
 UART_HandleTypeDef huart1;
-int timecounter=200000;
+int timecounter=200000000;
 
 /* USART1 init function */
 
@@ -254,7 +254,12 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart){
     HAL_UART_Receive_IT(&huart1,(uint8_t *)&buffer_rx_temp,1);
     if(buffer_rx_temp=='a')
     {
-      leftspeedkp=leftspeedkp+5;
+      target= angle ;//У׼
+      autostate=1;
+      leftmaichong=0;
+      rightmaichong=0;
+      leftspeederroracc=0;
+      rightspeederroracc=0;
       //uprintf("\n\nleftspeedkp=%lf",leftspeedkp);
     }
     else if(buffer_rx_temp=='b')
