@@ -72,7 +72,7 @@ void MX_TIM1_Init()
   }
 
   sConfigOC.OCMode = TIM_OCMODE_PWM1;
-  sConfigOC.Pulse = 1500;
+  sConfigOC.Pulse = 3600;
   sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
   sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
   if (HAL_TIM_PWM_ConfigChannel(&htim1, &sConfigOC, TIM_CHANNEL_1) != HAL_OK)
@@ -132,52 +132,49 @@ void MX_TIM2_Init(void)
 /* TIM3 init function */
 void MX_TIM3_Init(void)
 {
-    TIM_MasterConfigTypeDef sMasterConfig; 
-  //TIM_OC_InitTypeDef sConfigOC;
-	//HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13);
-  htim3.Instance = TIM3;
-  htim3.Init.Prescaler = 9;//143;//·ÖÆµ
-  htim3.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim3.Init.Period = 1000;//10000;
-  htim3.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
-  if (HAL_TIM_PWM_Init(&htim3) != HAL_OK)
-  {
-    _Error_Handler(__FILE__, __LINE__);
-  }
+        TIM_MasterConfigTypeDef sMasterConfig; 
+        htim3.Instance = TIM3;
+        htim3.Init.Prescaler = 9;//143;//·ÖÆµ
+        htim3.Init.CounterMode = TIM_COUNTERMODE_UP;
+        htim3.Init.Period = 1000;//10000;
+        htim3.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+        if (HAL_TIM_PWM_Init(&htim3) != HAL_OK)
+        {
+        _Error_Handler(__FILE__, __LINE__);
+        }
 
-  sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
-  sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
-  if (HAL_TIMEx_MasterConfigSynchronization(&htim3, &sMasterConfig) != HAL_OK)
-  {
-    _Error_Handler(__FILE__, __LINE__);
-  }
-  TIM_OC_InitTypeDef sConfigOC;
-  int pulse=100;
-  sConfigOC.OCMode = TIM_OCMODE_PWM1;
-  sConfigOC.Pulse = pulse;//5000;//Âö³å
-  sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
-  sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
-  if ((HAL_TIM_PWM_ConfigChannel(&htim3, &sConfigOC, TIM_CHANNEL_1)!=HAL_OK))
-  {
-    _Error_Handler(__FILE__, __LINE__);
-  }
+        sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
+        sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
+        if (HAL_TIMEx_MasterConfigSynchronization(&htim3, &sMasterConfig) != HAL_OK)
+        {
+        _Error_Handler(__FILE__, __LINE__);
+        }
+        TIM_OC_InitTypeDef sConfigOC;
+        int pulse=100;
+        sConfigOC.OCMode = TIM_OCMODE_PWM1;
+        sConfigOC.Pulse = pulse;//5000;//Âö³å
+        sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
+        sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
+        if ((HAL_TIM_PWM_ConfigChannel(&htim3, &sConfigOC, TIM_CHANNEL_1)!=HAL_OK))
+        {
+        _Error_Handler(__FILE__, __LINE__);
+        }
 	if(HAL_TIM_PWM_ConfigChannel(&htim3, &sConfigOC, TIM_CHANNEL_2) != HAL_OK)
 	{
 	_Error_Handler(__FILE__, __LINE__);
 	}
-if(HAL_TIM_PWM_ConfigChannel(&htim3, &sConfigOC, TIM_CHANNEL_3) != HAL_OK)
+        if(HAL_TIM_PWM_ConfigChannel(&htim3, &sConfigOC, TIM_CHANNEL_3) != HAL_OK)
 	{
 	_Error_Handler(__FILE__, __LINE__);
 	}
-
-  if(HAL_TIM_PWM_ConfigChannel(&htim3, &sConfigOC, TIM_CHANNEL_4) != HAL_OK)
+        if(HAL_TIM_PWM_ConfigChannel(&htim3, &sConfigOC, TIM_CHANNEL_4) != HAL_OK)
 	{
 	_Error_Handler(__FILE__, __LINE__);
 	}
 
         HAL_TIM_MspPostInit(&htim3);
-  HAL_TIM_PWM_Start(&htim3,TIM_CHANNEL_4);
-  HAL_TIM_PWM_Start(&htim3,TIM_CHANNEL_3);
+        HAL_TIM_PWM_Start(&htim3,TIM_CHANNEL_4);
+        HAL_TIM_PWM_Start(&htim3,TIM_CHANNEL_3);
 	HAL_TIM_PWM_Start(&htim3,TIM_CHANNEL_2);
 	HAL_TIM_PWM_Start(&htim3,TIM_CHANNEL_1);
 }

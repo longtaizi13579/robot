@@ -1,39 +1,39 @@
-"C:\Users\sky\Desktop\崔钊郡2段\崔钊郡\Src\control.c"
+"C:\Users\bread\Desktop\robot\崔钊郡3,4\Src\control.c"
 -std=c11
 -ferror-limit=0
 -fbracket-depth=512
 -I
-C:\Users\sky\Desktop\崔钊郡2段\崔钊郡\EWARM/../Inc
+C:\Users\bread\Desktop\robot\崔钊郡3,4\EWARM/../Inc
 -I
-C:\Users\sky\Desktop\崔钊郡2段\崔钊郡\EWARM/../Drivers/STM32F1xx_HAL_Driver/Inc
+C:\Users\bread\Desktop\robot\崔钊郡3,4\EWARM/../Drivers/STM32F1xx_HAL_Driver/Inc
 -I
-C:\Users\sky\Desktop\崔钊郡2段\崔钊郡\EWARM/../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy
+C:\Users\bread\Desktop\robot\崔钊郡3,4\EWARM/../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy
 -I
-C:\Users\sky\Desktop\崔钊郡2段\崔钊郡\EWARM/../Drivers/CMSIS/Device/ST/STM32F1xx/Include
+C:\Users\bread\Desktop\robot\崔钊郡3,4\EWARM/../Drivers/CMSIS/Device/ST/STM32F1xx/Include
 -I
-C:\Users\sky\Desktop\崔钊郡2段\崔钊郡\EWARM/../Drivers/CMSIS/Include
+C:\Users\bread\Desktop\robot\崔钊郡3,4\EWARM/../Drivers/CMSIS/Include
 -I
-E:\机器人\IAR\arm\CMSIS\Core\Include
+D:\robot\IAR 8.22.1\arm\CMSIS\Core\Include
 -I
-E:\机器人\IAR\arm\CMSIS\DSP\Include
+D:\robot\IAR 8.22.1\arm\CMSIS\DSP\Include
 -I
-E:\机器人\IAR\arm\inc
+D:\robot\IAR 8.22.1\arm\inc
 -I
-E:\机器人\IAR\arm\inc\c
+D:\robot\IAR 8.22.1\arm\inc\c
 -I
-C:\Users\sky\Desktop\崔钊郡2段\崔钊郡\Inc
+C:\Users\bread\Desktop\robot\崔钊郡3,4\Inc
 -I
-C:\Users\sky\Desktop\崔钊郡2段\崔钊郡\Drivers\STM32F1xx_HAL_Driver\Inc
+C:\Users\bread\Desktop\robot\崔钊郡3,4\Drivers\STM32F1xx_HAL_Driver\Inc
 -I
-C:\Users\sky\Desktop\崔钊郡2段\崔钊郡\Drivers\STM32F1xx_HAL_Driver\Inc\Legacy
+C:\Users\bread\Desktop\robot\崔钊郡3,4\Drivers\STM32F1xx_HAL_Driver\Inc\Legacy
 -I
-C:\Users\sky\Desktop\崔钊郡2段\崔钊郡\Drivers\CMSIS\Device\ST\STM32F1xx\Include
+C:\Users\bread\Desktop\robot\崔钊郡3,4\Drivers\CMSIS\Device\ST\STM32F1xx\Include
 -I
-C:\Users\sky\Desktop\崔钊郡2段\崔钊郡\Drivers\CMSIS\Include
+C:\Users\bread\Desktop\robot\崔钊郡3,4\Drivers\CMSIS\Include
 -I
-E:\机器人\IAR\arm\CMSIS\Core\Include
+D:\robot\IAR 8.22.1\arm\CMSIS\Core\Include
 -I
-E:\机器人\IAR\arm\CMSIS\DSP\Include
+D:\robot\IAR 8.22.1\arm\CMSIS\DSP\Include
 -D__CHAR_BITS__=8
 -D__CHAR_MAX__=0xff
 -D__CHAR_MIN__=0
@@ -289,8 +289,8 @@ E:\机器人\IAR\arm\CMSIS\DSP\Include
 -D__EDG_FLOAT128_ENABLING_POSSIBLE=0
 -DUSE_HAL_DRIVER=1
 -DSTM32F103xB=1
--D_DLIB_CONFIG_FILE_HEADER_NAME="E:\\@@@\\IAR\\arm\\INC\\c\\DLib_Config_Full.h"
--D_DLIB_CONFIG_FILE_STRING="E:\\@@@\\IAR\\arm\\INC\\c\\DLib_Config_Full.h"
+-D_DLIB_CONFIG_FILE_HEADER_NAME="D:\\robot\\IAR 8.22.1\\arm\\INC\\c\\DLib_Config_Full.h"
+-D_DLIB_CONFIG_FILE_STRING="D:\\robot\\IAR 8.22.1\\arm\\INC\\c\\DLib_Config_Full.h"
 -D__VERSION__="IAR ANSI C/C++ Compiler V8.22.1.15669/W32 for ARM"
 -D__ICCARM_OLD_DEFINED_VAARGS__=1
 -D__VA_STACK_ALIGN__=8

@@ -14,9 +14,9 @@ int16_t gy[3];   //三轴陀螺仪的值，分别为 X　Y　Z的角速度
 int16_t ac[3];  //XYZ三轴的加速度
 int16_t mag[3]; //三轴磁场
 
-double KP = -0.21;
+double KP = -0.12;//-0.21
 double KI = 0;//0.02;
-double KD = 0.05;//10;
+double KD = 0.5;//10;
 
 double PID = 0;
 
@@ -44,8 +44,12 @@ float rightspeederroracc=0;//右轮速度累计误差
 float rightspeederrorlast=0;//右轮上次误差
 int speedenable=1;//速度环使能
 int angleset=0;//速度环预设值
-
 int direction_enable=0;//方向环使能
+//角速度环
+int gy_enable=1;
+float angle_speedPID=0;
+float last_angle_speed=0;
+
 void megnet()//磁力计获取角度
 {
   MPU_Read6500(&MPU9250,ac,gy);
@@ -65,12 +69,36 @@ void megnet()//磁力计获取角度
       angle = angle <= -180 ? angle + 360 : angle;
 }
 }
+float calangle=0;
+int counter=0;
+float gz3=0;
+void gy_get()//角速度采集
+{
+  //角速度转换
+  gz3=((float)gy[2]/32768.0f)*500.0f;
+}
+float angle_speed=0;
+float angle_speedacc=0;
+float angle_error=0;
+//角速度控制，全场定位
+void gy_control()//角速度环pid
+{
+    angle_speed=((gz3-0.161791)*0.005)/163.18*360.0;
+    angle_error=(-1)*(angleset-angle_speed);
+    angleset-=angle_speed;
+    uprintf("angleset=%f\n",angleset);
+    if(!gy_enable)//关闭使能后，控制速度可以直接调节leftspeedset,rightspeedset
+      return ;
+    angle_speedPID = angle_error * KP + (angle_error-last_angle_speed) * KD;
+    leftspeedset=(-1)*angle_speedPID;
+    rightspeedset=angle_speedPID;
+    last_angle_speed=angle_error;
+}
 void direction_control()//方向环PID
 {
     if(!direction_enable)//关闭使能后，控制速度可以直接调节leftspeedset,rightspeedset
       return ;
     accu_angle += angle;
-    //uprintf("angle=%d",angle);
     if(accu_angle > 10000)
       accu_angle = 10000;
     if(accu_angle < -10000)
@@ -78,9 +106,7 @@ void direction_control()//方向环PID
     PID = accu_angle * KI + angle * KP + (angle-last_angle) * KD;
     leftspeedset=(float)initrightspeedset-PID;
     rightspeedset=(float)initrightspeedset+PID;
-    //pwm_control(pwm1,pwm2);
     last_angle=angle;
-    //send_wave((float)angle,(float)leftspeedset,(float)rightspeedset,(float)0);
 
 }
 
@@ -89,7 +115,6 @@ void speed_control()//速度环
     //左轮pid
     float lefterror=leftspeedset-(float)leftspeed;
     leftspeederroracc+=lefterror;
-    
     int leftPIDcontrol=(int)(leftspeedkp*lefterror+leftspeedki*leftspeederroracc+leftspeedkd*(lefterror-leftspeederrorlast));
     leftspeederrorlast=lefterror;
     //右轮pid
@@ -97,11 +122,7 @@ void speed_control()//速度环
     rightspeederroracc+=righterror;
     int rightPIDcontrol=(int)(rightspeedkp*righterror+rightspeedki*rightspeederroracc+rightspeedkd*(righterror-rightspeederrorlast));
     rightspeederrorlast=righterror;
-    //if(speedenable)
-    //{
-      pwm_control(leftPIDcontrol,rightPIDcontrol);
-      //uprintf("leftPIDcontrol=%d,rightPIDcontrol=%d",leftPIDcontrol,rightPIDcontrol);
-    //}
+    pwm_control(leftPIDcontrol,rightPIDcontrol);
     leftspeed=0;
     rightspeed=0;
     uprintf("left=%d,right=%d",leftmaichong,rightmaichong);
@@ -130,9 +151,6 @@ void maichongnew()//更新脉冲（1ms一次）
 }
 void auto_control1()
 {
-  //state1=610;
-  //state3=1110;
-
   if(rightmaichong>210&&autostate==1)
   {
     leftmaichong=0;

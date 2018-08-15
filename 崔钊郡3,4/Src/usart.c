@@ -245,6 +245,8 @@ void uprintf2(char *fmt, ...)
 int num=0 ;
   float initrightspeedset=0;
   float initleftspeedset=0;
+  int statecount=0;
+  int statecount1=0;
 /* USER CODE END 1 */
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart){
   static uint16_t stick_1 = 0;
@@ -264,10 +266,8 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart){
     }
     else if(buffer_rx_temp=='b')
     {
-     // direction_enable=0;
       leftspeedset=0;
       rightspeedset=0;
-      //uprintf("\n\nleftspeedkp=%lf",leftspeedkp);
     }
     else if(buffer_rx_temp=='c')
     {
@@ -369,8 +369,6 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart){
         rightspeedset=rightspeedset-0.1;
       }
       timecounter=350;
-      //angleset=angleset-5;
-      //angleset = angleset <= -180 ? angleset + 360 : angleset;
     }
     else if(buffer1_rx_temp=='D'){
        if(leftspeedset>=0)
@@ -384,45 +382,19 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart){
         rightspeedset=rightspeedset;
       }
       timecounter=350;
-     //angleset=angleset+5;
-     //angleset = angleset > 180 ? angleset - 360 : angleset;
     }
     else if(buffer1_rx_temp=='I'){//放手直行
-      /*num=23;
-      changestate(num);
-      uprintf("%d\r\n",TIM4->CCR3);
-      uprintf("hello world\r\n");
-    *//*leftspeedset=4;
-      rightspeedset=4;
-      timecounter=200000;
-    */  
       leftspeedset=6;
       rightspeedset=6;
       timecounter=200000000;
     }
     else if(buffer1_rx_temp=='J'){//放手直行
-      /*num=43;
-      changestate(num);
-      uprintf("%d\r\n",TIM4->CCR3);
-      uprintf("hello world\r\n");
-    *//*leftspeedset=-4;
-      rightspeedset=-4;
-      timecounter=200000;
-    */ leftspeedset=-6;
+      leftspeedset=-6;
       rightspeedset=-6;
       timecounter=200000000;
     }
     else if(buffer1_rx_temp=='K'){//右占空比增加
-      if(rightspeedset>0)
-      {
-        leftspeedset=1;
-        rightspeedset=6;
-      }
-      else
-      {
-        leftspeedset=-1;
-        rightspeedset=-6;  
-      }
+      angleset=90;
       timecounter=20000;
     }
     else if(buffer1_rx_temp=='L'){//左占空比增加
@@ -489,7 +461,51 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart){
       leftspeederroracc=0;
       rightspeederroracc=0;
     }
-    
+    else if(buffer1_rx_temp=='M'){//电机
+      if(statecount1==0)
+      {
+        TIM1->CCR1=3600;
+        TIM1->CCR4=1800;
+        statecount1++;
+      }
+      else if(statecount1==1)
+      {
+        TIM1->CCR1=3600;
+        TIM1->CCR4=3600;
+        statecount1++;
+      }
+      else if(statecount1==2)
+      {
+        TIM1->CCR1=1800;
+        TIM1->CCR4=3600;
+        statecount1++;
+      }
+       else if(statecount1==3)
+      {
+        TIM1->CCR1=3600;
+        TIM1->CCR4=3600;
+        statecount1=0;
+      }
+      
+    }
+     else if(buffer1_rx_temp=='N'){//舵机
+      if(statecount==0)
+      {
+      num=23;
+      changestate(num);
+      uprintf("%d\r\n",TIM4->CCR3);
+      uprintf("hello world\r\n");
+      statecount++;
+      }
+      else
+      {
+      num=43;
+      changestate(num);
+      uprintf("%d\r\n",TIM4->CCR3);
+      uprintf("hello world\r\n");
+      statecount=0;
+      }
+    }
   }
 }
 char s[22]={'b','y',16,6};

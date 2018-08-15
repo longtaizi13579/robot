@@ -250,14 +250,14 @@ void SystemClock_Config(void)
 void HAL_SYSTICK_Callback(){
   timecounter--;
   static int time_1ms_cnt = 0;
-  static int time_50ms_cnt=0;
   time_1ms_cnt++;
-  time_50ms_cnt++;
   maichongnew();
   auto_control1();
   if(time_1ms_cnt==5){
     time_1ms_cnt=0;
     megnet();
+    gy_get();
+    gy_control();
     //direction_control();//方向环使能已关闭
     if(timecounter<270)//松手停止
     {
@@ -265,11 +265,6 @@ void HAL_SYSTICK_Callback(){
       rightspeedset=0;
     }
     speed_control();
-  }
-  if(time_50ms_cnt==50)
-  {
-    //send_wave((float)rightspeed,(float)rightspeedset,(float)leftspeed,(float)leftspeedset);
-    time_50ms_cnt=0;
   }
 }
 

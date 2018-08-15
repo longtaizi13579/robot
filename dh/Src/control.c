@@ -76,8 +76,6 @@ void gy_get()//角速度采集
 {
   //角速度转换
   gz3=((float)gy[2]/32768.0f)*500.0f;
-  //calangle+=gz3;
-  //uprintf("gz3=%f,calangle=%f,avreage=%f\n",gz3,calangle,cal);
 }
 float angle_speed=0;
 float angle_speedacc=0;
@@ -86,30 +84,15 @@ float angle_error=0;
 void gy_control()//角速度环pid
 {
     angle_speed=((gz3-0.161791)*0.005)/163.18*360.0;
-    /*if(angleset<1&&angleset>-1)
-    {
-      angleset=0;
-      leftspeedset=0;
-      rightspeedset=0;
-      return;
-    }*/
     angle_error=(-1)*(angleset-angle_speed);
     angleset-=angle_speed;
-    //angle_speedacc+=angle_speed;
-    //uprintf("angle_speed=%f",angle_speed);
     uprintf("angleset=%f\n",angleset);
-    //uprintf("angle_speedacc=%f\n",angle_speedacc);
     if(!gy_enable)//关闭使能后，控制速度可以直接调节leftspeedset,rightspeedset
       return ;
     angle_speedPID = angle_error * KP + (angle_error-last_angle_speed) * KD;
     leftspeedset=(-1)*angle_speedPID;
     rightspeedset=angle_speedPID;
-    //uprintf("leftspeedset=%f,rightspeedset=%f",leftspeedset,rightspeedset);
-    //pwm_control(pwm1,pwm2);
     last_angle_speed=angle_error;
-    //send_wave((float)angle,(float)leftspeedset,(float)rightspeedset,(float)0);
-
-   // calangle=0;
 }
 void direction_control()//方向环PID
 {
