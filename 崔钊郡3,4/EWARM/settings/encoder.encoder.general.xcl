@@ -1,0 +1,15 @@
+"D:\robot\IAR 8.22.1\arm\bin\armproc.dll" 
+
+"D:\robot\IAR 8.22.1\arm\bin\armjlink2.dll" 
+
+"C:\Users\bread\Desktop\robot\崔钊郡3,4\EWARM\encoder\Exe\encoder.out" 
+
+--plugin "D:\robot\IAR 8.22.1\arm\bin\armbat.dll" 
+
+--device_macro "D:\robot\IAR 8.22.1\arm\config\debugger\ST\STM32F1xx_XL.dmac" 
+
+--flash_loader "D:\robot\IAR 8.22.1\arm\config\flashloader\ST\FlashSTM32F10xx8.board" 
+
+
+
+

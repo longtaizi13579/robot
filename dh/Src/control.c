@@ -14,6 +14,8 @@ int16_t gy[3];   //三轴陀螺仪的值，分别为 X　Y　Z的角速度
 int16_t ac[3];  //XYZ三轴的加速度
 int16_t mag[3]; //三轴磁场
 
+float gyset[3];//角速度预设值
+
 double KP = -0.21;
 double KI = 0;//0.02;
 double KD = 0.05;//10;
@@ -31,21 +33,23 @@ int rightspeed=0;//右轮速度
 float leftspeedset=0;//左轮速度预值
 float rightspeedset=0;//右轮速度预值
 float leftspeedkp=100;//左轮速度p值
-float leftspeedki=0.5;//左轮速度i值
-float leftspeedkd=-10;//左轮速度d值
+float leftspeedki=10;//左轮速度i值
+float leftspeedkd=0;//左轮速度d值
 float leftspeederroracc=0;//左轮速度累计误差
 float leftspeederrorlast=0;//左轮上次误差
 int leftmaichong=0;//脉冲数
 int rightmaichong=0;//脉冲数
 float rightspeedkp=105;//右轮速度p值
-float rightspeedki=0.55;//右轮速度i值
-float rightspeedkd=-10;//右轮速度d值
+float rightspeedki=10.5;//右轮速度i值
+float rightspeedkd=0;//右轮速度d值
 float rightspeederroracc=0;//右轮速度累计误差
 float rightspeederrorlast=0;//右轮上次误差
 int speedenable=1;//速度环使能
 int angleset=0;//速度环预设值
-
+int gy_enable=1;
 int direction_enable=0;//方向环使能
+float angle_speedPID=0;
+float last_angle_speed=0;
 void megnet()//磁力计获取角度
 {
   MPU_Read6500(&MPU9250,ac,gy);
@@ -64,6 +68,48 @@ void megnet()//磁力计获取角度
       angle = angle > 180 ? angle - 360 : angle;
       angle = angle <= -180 ? angle + 360 : angle;
 }
+}
+float calangle=0;
+int counter=0;
+float gz3=0;
+void gy_get()//角速度采集
+{
+  //角速度转换
+  gz3=((float)gy[2]/32768.0f)*500.0f;
+  //calangle+=gz3;
+  //uprintf("gz3=%f,calangle=%f,avreage=%f\n",gz3,calangle,cal);
+}
+float angle_speed=0;
+float angle_speedacc=0;
+float angle_error=0;
+//角速度控制，全场定位
+void gy_control()//角速度环pid
+{
+    angle_speed=((gz3-0.161791)*0.005)/163.18*360.0;
+    /*if(angleset<1&&angleset>-1)
+    {
+      angleset=0;
+      leftspeedset=0;
+      rightspeedset=0;
+      return;
+    }*/
+    angle_error=(-1)*(angleset-angle_speed);
+    angleset-=angle_speed;
+    //angle_speedacc+=angle_speed;
+    //uprintf("angle_speed=%f",angle_speed);
+    uprintf("angleset=%f\n",angleset);
+    //uprintf("angle_speedacc=%f\n",angle_speedacc);
+    if(!gy_enable)//关闭使能后，控制速度可以直接调节leftspeedset,rightspeedset
+      return ;
+    angle_speedPID = angle_error * KP + (angle_error-last_angle_speed) * KD;
+    leftspeedset=(-1)*angle_speedPID;
+    rightspeedset=angle_speedPID;
+    //uprintf("leftspeedset=%f,rightspeedset=%f",leftspeedset,rightspeedset);
+    //pwm_control(pwm1,pwm2);
+    last_angle_speed=angle_error;
+    //send_wave((float)angle,(float)leftspeedset,(float)rightspeedset,(float)0);
+
+   // calangle=0;
 }
 void direction_control()//方向环PID
 {
@@ -104,7 +150,7 @@ void speed_control()//速度环
     //}
     leftspeed=0;
     rightspeed=0;
-    uprintf("left=%d,right=%d",leftmaichong,rightmaichong);
+    //uprintf("left=%d,right=%d",leftmaichong,rightmaichong);
 }
 int autostate=0;//自动控制状态
 int laststate=0;//上一次状态
@@ -158,8 +204,30 @@ void auto_control1()
     rightmaichong=0;
     autostate=5; 
   }
- 
-  
+ else if(autostate==6 && leftmaichong<-490)
+ {
+     leftmaichong=0;
+    rightmaichong=0;
+    autostate=7; 
+ }
+  else if(autostate==7 && rightmaichong<-1310)
+ {
+     leftmaichong=0;
+    rightmaichong=0;
+    autostate=8; 
+ }
+ else if(autostate==8 && rightmaichong>920)
+ {
+     leftmaichong=0;
+    rightmaichong=0;
+    autostate=9; 
+ }
+ else if(autostate==9 && leftmaichong<-170)
+ {
+     leftmaichong=0;
+    rightmaichong=0;
+    autostate=10; 
+ }
   if(laststate!=autostate)
   {
     if(autostate==1)
@@ -187,6 +255,41 @@ void auto_control1()
       direction_enable=0;
     }
     else if(autostate==5)
+    {
+      direction_enable=0;
+      leftspeedset=0;
+      rightspeedset=0;
+    
+    }
+    else if(autostate==6)
+    {
+      direction_enable=0;
+      leftspeedset=-12.066;
+      rightspeedset=-3.5;
+     
+    }
+   else if(autostate==7)
+    {
+      direction_enable=0;
+      leftspeedset=-9;
+      rightspeedset=-12.11;
+    
+    }
+    else if(autostate==8)
+    {
+      direction_enable=0;
+      leftspeedset=0;
+      rightspeedset=12.5;
+    
+    }
+     else if(autostate==9)
+    {
+      direction_enable=0;
+      leftspeedset=-11;
+      rightspeedset=-11.95;
+    
+    }
+    else if(autostate==10)
     {
       direction_enable=0;
       leftspeedset=0;

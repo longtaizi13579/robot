@@ -21,5 +21,10 @@ extern void auto_control1();
 extern float leftspeederroracc;//左轮速度累计误差
 extern float rightspeederroracc;//右轮速度累计误差
 extern void maichongnew();
+extern void gy_get();
+extern float angle_speedacc;
+extern void gy_control();
+extern int counter;
+extern float calangle;
 #endif /*__ control_H */
 

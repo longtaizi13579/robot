@@ -260,21 +260,30 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart){
       rightmaichong=0;
       leftspeederroracc=0;
       rightspeederroracc=0;
+      calangle=0;
       //uprintf("\n\nleftspeedkp=%lf",leftspeedkp);
     }
     else if(buffer_rx_temp=='b')
     {
-      leftspeedkp=leftspeedkp-5;
-      //uprintf("\n\nleftspeedkp=%lf",leftspeedkp);
+       target= angle ;//У׼
+      autostate=6;
+      leftmaichong=0;
+      rightmaichong=0;
+      leftspeederroracc=0;
+      rightspeederroracc=0;
     }
     else if(buffer_rx_temp=='c')
     {
-      leftspeedkd=leftspeedkd+0.5;
+      //leftspeedkd=leftspeedkd+0.5;
+      counter=0;
+      calangle=0;
+      angle_speedacc=0;
       //uprintf("\n\nleftspeedkd=%lf",leftspeedkd);
     }
     else if(buffer_rx_temp=='d')
     {
-      leftspeedkd=leftspeedkd-0.5;
+      angleset=90;
+      
       //uprintf("\n\nleftspeedkd=%lf",leftspeedkd);
     }
     else if(buffer_rx_temp=='e')
